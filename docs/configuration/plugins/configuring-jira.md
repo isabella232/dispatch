@@ -35,3 +35,7 @@ Dispatch ships with Jira support. Each Jira installation is unique, so you will 
 ## `JIRA_HOSTING_TYPE` \[Default: 'Cloud'\]
 
 > Type of Jira hosting used (e.g. Cloud, Server).
+
+## `JIRA_ASSIGNEE_ACCOUNT_ID` \[Optional\]
+
+> In Cloud installations with strict GDPR support enabled, the username search is disabled.  This setting allows you to set a default assignee object Id for created issues.

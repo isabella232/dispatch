@@ -21,6 +21,7 @@ from .config import (
     JIRA_PASSWORD,
     JIRA_PROJECT_ID,
     JIRA_USERNAME,
+    JIRA_ASSIGNEE_ACCOUNT_ID
 )
 
 
@@ -56,18 +57,21 @@ def get_user_field(client: JIRA, user_email) -> dict:
         user = client.search_users(user_email, maxResults=1)[0]
         return {"name": user.name}
     if JIRA_HOSTING_TYPE == "Cloud":
-        username = get_email_username(user_email)
-        user = next(
-            client._fetch_pages(
-                User,
-                None,
-                "user/search",
-                startAt=0,
-                maxResults=1,
-                params={"query": username},
+        if JIRA_ASSIGNEE_ACCOUNT_ID is not None:
+            return {"id": JIRA_ASSIGNEE_ACCOUNT_ID}
+        else:
+            username = get_email_username(user_email)
+            user = next(
+                client._fetch_pages(
+                    User,
+                    None,
+                    "user/search",
+                    startAt=0,
+                    maxResults=1,
+                    params={"query": username},
+                )
             )
-        )
-        return {"id": user.accountId}
+            return {"id": user.accountId}
 
 
 def process_incident_type_plugin_metadata(plugin_metadata: dict):
